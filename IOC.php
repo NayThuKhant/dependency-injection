@@ -3,24 +3,32 @@
 
 class IOC
 {
-    //  Get an object instance of a class
-    public static function getInstance($className)
+    /**
+     * @throws ReflectionException
+     */
+    public static function getInstance($className): object
     {
-        $paramArr = self::getMethodParams($className);
-        return (new ReflectionClass($className))->newInstanceArgs($paramArr);
+        $paramArray = self::getMethodParams($className);
+        return (new ReflectionClass($className))->newInstanceArgs($paramArray);
     }
 
+    /**
+     * @throws Exception
+     */
     public static function make($className, $methodName, $params = [])
     {
-        //  Gets an instance of a class
         $instance = self::getInstance($className);
-        //  Get the parameters of dependency injection required by this method
-        $paramArr = self::getMethodParams($className, $methodName);
-        return $instance->{$methodName}(...array_merge($paramArr, $params));
+
+        $paramArray = self::getMethodParams($className, $methodName);
+        return $instance->{$methodName}(...array_merge($paramArray, $params));
     }
 
 
-    protected static function getMethodParams($className, $methodsName = '__construct')
+    /**
+     * @throws ReflectionException
+     * @throws Exception
+     */
+    protected static function getMethodParams($className, $methodsName = '__construct'): array
     {
         try {
             $class = new ReflectionClass($className);

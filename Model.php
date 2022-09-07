@@ -2,7 +2,7 @@
 
 class Model
 {
-    public $table = '';
+    public mixed $table = '';
     function __construct()
     {
         $this->table = $this->table ?: Inflect::pluralize(strtolower(get_class($this)));
